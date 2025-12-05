@@ -5,30 +5,44 @@
 
 const browserAPI = (typeof browser !== 'undefined') ? browser : chrome;
 
-importScripts('config.js');
-
-const API_BASE_URL = 'https://www.ipqualityscore.com/api/json/url';
+const API_BASE_URL = 'https://phishark.com/api/check-url';
 
 /**
- * Check if a URL is unsafe using IPQualityScore API
+ * Check if a URL is unsafe using PhiShark API
  * @param {string} url - The URL to check
  * @returns {Promise<boolean>} - Returns true if the URL is unsafe, false if safe
  */
 async function isUrlUnsafe(url) {
   try {
-    const encodedUrl = encodeURIComponent(url);
-    const apiUrl = `${API_BASE_URL}/${CONFIG.API_KEY}/${encodedUrl}`;
-    const response = await fetch(apiUrl);
+    const response = await fetch(API_BASE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        url: url,
+        private_mode: true
+      })
+    });
+    
     if (!response.ok) {
       console.error('API request failed:', response.status, response.statusText);
       return false;
     }
+    
     const data = await response.json();
-    if (!data.success) {
-      console.error('API returned error:', data.message);
-      return false;
-    }
-    return data.unsafe === true;
+    
+    // PhiShark returns a decision field: "allow" or "block"
+    // and a malicious_probability score (0-1)
+    const isUnsafe = data.decision === 'block' || data.malicious_probability > 0.5;
+    
+    console.log('[SafeLink] PhiShark analysis:', {
+      decision: data.decision,
+      probability: data.malicious_probability,
+      unsafe: isUnsafe
+    });
+    
+    return isUnsafe;
   } catch (error) {
     console.error('Error checking URL safety:', error);
     return false;
