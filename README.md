@@ -2,6 +2,10 @@
 
 **SafeLink** est une extension de navigateur qui vérifie automatiquement la sécurité des liens avant que vous ne cliquiez dessus. Naviguez en toute tranquillité grâce à une protection en temps réel contre les sites de phishing et les URLs malveillantes.
 
+## 🎥 Démo
+
+Regardez SafeLink en action : [Vidéo de démonstration](https://youtu.be/FgyTcUIoBXk)
+
 ## ✨ Fonctionnalités
 
 - 🔍 **Vérification automatique** : Analyse les liens au survol après 1,5 seconde
