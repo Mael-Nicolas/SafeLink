@@ -3,7 +3,8 @@
  * Background script for checking URL safety
  */
 
-// Import configuration
+const browserAPI = (typeof browser !== 'undefined') ? browser : chrome;
+
 importScripts('config.js');
 
 const API_BASE_URL = 'https://www.ipqualityscore.com/api/json/url';
@@ -33,3 +34,28 @@ async function isUrlUnsafe(url) {
     return false;
   }
 }
+
+/**
+ * Listen for messages from content scripts
+ */
+browserAPI.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'checkUrl') {
+    const url = request.url;
+    console.log('[SafeLink] Checking URL:', url);
+    
+    isUrlUnsafe(url).then((unsafe) => {
+      const result = {
+        url: url,
+        unsafe: unsafe,
+        timestamp: new Date().toISOString()
+      };
+      console.log('[SafeLink] Result:', result);
+      sendResponse(result);
+    }).catch((error) => {
+      console.error('[SafeLink] Error:', error);
+      sendResponse({ url: url, unsafe: false, error: error.message });
+    });
+    
+    return true;
+  }
+});
