@@ -8,12 +8,31 @@ const browserAPI = (typeof browser !== 'undefined') ? browser : chrome;
 let hoverTimeout = null;
 let currentLink = null;
 let badge = null;
+let isEnabled = true;
 
 // Load CSS
 const link = document.createElement('link');
 link.rel = 'stylesheet';
 link.href = browserAPI.runtime.getURL('scripts/styles.css');
 document.head.appendChild(link);
+
+// Load saved state
+browserAPI.storage.local.get(['enabled'], (result) => {
+  isEnabled = result.enabled !== false; // Default to true
+  console.log('[SafeLink] Content script loaded, enabled:', isEnabled);
+});
+
+// Listen for toggle messages
+browserAPI.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'toggleExtension') {
+    isEnabled = request.enabled;
+    console.log('[SafeLink] Extension toggled:', isEnabled);
+    if (!isEnabled) {
+      removeBadge();
+      clearTimeout(hoverTimeout);
+    }
+  }
+});
 
 function createBadge(text, icon, className) {
   const div = document.createElement('div');
@@ -46,7 +65,7 @@ function removeBadge() {
 
 document.addEventListener('mouseover', (event) => {
   const link = event.target.closest('a');
-  if (!link || !link.href) {
+  if (!link || !link.href || !isEnabled) {
     clearTimeout(hoverTimeout);
     removeBadge();
     currentLink = null;

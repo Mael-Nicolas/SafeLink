@@ -3,7 +3,7 @@
   "description": "Check urls before visiting them.",
   "version": "0.1",
   "manifest_version": 3,
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "storage", "tabs"],
   "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "scripts/service-worker.js"
