@@ -53,7 +53,10 @@ function positionBadge(link) {
   
   const rect = link.getBoundingClientRect();
   badge.style.left = (rect.left + rect.width / 2 - badge.offsetWidth / 2) + 'px';
-  badge.style.top = (rect.top - 35) + 'px';
+  let top = rect.top - 35;
+  // If the badge is off the top of the page, position it below the link
+  if (top < 0) top = rect.top + 35;
+  badge.style.top = top + 'px';
 }
 
 function removeBadge() {
