@@ -20,6 +20,11 @@
       "matches": ["<all_urls>"]
     }
   ],
+    "icons": {
+    "16": "images/safelink_logo.png",
+    "48": "images/safelink_logo.png",
+    "128": "images/safelink_logo.png"
+  },
   "action": {
     "default_popup": "/popup/popup.html",
     "default_icon": "/images/safelink_logo.png"
