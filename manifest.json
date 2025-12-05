@@ -3,6 +3,17 @@
   "description": "Check urls before visiting them.",
   "version": "0.1",
   "manifest_version": 3,
+  "permissions": ["activeTab"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "scripts/service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["scripts/content.js"]
+    }
+  ],
   "action": {
     "default_popup": "/popup/popup.html",
     "default_icon": "/images/safelink_logo.png"
