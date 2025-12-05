@@ -43,18 +43,20 @@ browserAPI.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const url = request.url;
     console.log('[SafeLink] Checking URL:', url);
     
-    isUrlUnsafe(url).then((unsafe) => {
-      const result = {
-        url: url,
-        unsafe: unsafe,
-        timestamp: new Date().toISOString()
-      };
-      console.log('[SafeLink] Result:', result);
-      sendResponse(result);
-    }).catch((error) => {
-      console.error('[SafeLink] Error:', error);
-      sendResponse({ url: url, unsafe: false, error: error.message });
-    });
+    isUrlUnsafe(url)
+      .then((unsafe) => {
+        const result = {
+          url: url,
+          unsafe: unsafe,
+          timestamp: new Date().toISOString()
+        };
+        console.log('[SafeLink] Result:', result);
+        sendResponse(result);
+      })
+      .catch((error) => {
+        console.error('[SafeLink] Error:', error);
+        sendResponse({ url: url, unsafe: false, error: error.message });
+      });
     
     return true;
   }
