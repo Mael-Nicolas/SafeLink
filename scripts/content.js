@@ -55,12 +55,18 @@ document.addEventListener('mouseover', (event) => {
 
   currentLink = link;
   removeBadge();
-  badge = createBadge('Vérification...', '', 'loading');
-  positionBadge(link);
+
+  // Show badge after 0.5s
+  setTimeout(() => {
+    if (currentLink === link && !badge) {
+      badge = createBadge('Vérification...', '', 'loading');
+      positionBadge(link);
+    }
+  }, 500);
 
   hoverTimeout = setTimeout(() => {
     const url = link.href;
-    console.log('[SafeLink] URL hovered for 2s:', url);
+    console.log('[SafeLink] URL hovered for 1.5s:', url);
     
     try {
       browserAPI.runtime.sendMessage(
@@ -91,7 +97,7 @@ document.addEventListener('mouseover', (event) => {
       console.error('[SafeLink] Error sending message:', error);
       removeBadge();
     }
-  }, 2000);
+  }, 1250);
 });
 
 document.addEventListener('mouseout', (event) => {
