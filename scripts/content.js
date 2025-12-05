@@ -102,11 +102,11 @@ document.addEventListener('mouseover', (event) => {
             if (response.unsafe) {
               console.warn('[SafeLink] ⚠️ UNSAFE URL:', url);
               badge.className = 'safelink-badge unsafe';
-              badge.innerHTML = '<span>🚫</span><span>Pas sûr</span>';
+              badge.innerHTML = '<span>Pas sûr</span>';
             } else {
               console.log('[SafeLink] ✓ Safe URL:', url);
               badge.className = 'safelink-badge safe';
-              badge.innerHTML = '<span>✓</span><span>Sûr</span>';
+              badge.innerHTML = '<span>Sûr</span>';
             }
             positionBadge(currentLink);
           }

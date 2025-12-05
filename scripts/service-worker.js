@@ -5,7 +5,7 @@
 
 const browserAPI = (typeof browser !== 'undefined') ? browser : chrome;
 
-const API_BASE_URL = 'https://phishark.com/api/check-url';
+const API_BASE_URL = 'https://phishark.net/api/check-url';
 
 /**
  * Check if a URL is unsafe using PhiShark API
@@ -31,13 +31,12 @@ async function isUrlUnsafe(url) {
     }
     
     const data = await response.json();
+
+    console.log('[SafeLink] PhiShark API response:', data);
     
-    // PhiShark returns a decision field: "allow" or "block"
-    // and a malicious_probability score (0-1)
-    const isUnsafe = data.decision === 'block' || data.malicious_probability > 0.5;
+    const isUnsafe = data.malicious_probability > 0.4;
     
     console.log('[SafeLink] PhiShark analysis:', {
-      decision: data.decision,
       probability: data.malicious_probability,
       unsafe: isUnsafe
     });
